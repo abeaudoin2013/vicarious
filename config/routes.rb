@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   get 'maps/index', to: 'maps#index', as: 'around_the_world'
+  post 'maps/create', to: 'maps#create_story', as: 'tag_the_world'
   get 'stories/new', to: 'stories#new'
   get 'stories/index', to: 'stories#index'
   get 'stories/show', to: 'stories#show'

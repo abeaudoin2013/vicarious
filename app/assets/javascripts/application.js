@@ -30,6 +30,11 @@ function initialize() {
         }
       });
   map.setStreetView(panorama);
+
+  panorama.addListener('pov_changed', function() {
+  console.log(panorama.getPov().heading);
+  console.log(panorama.getPov().pitch);
+  });
 }
 
 // (function() {
@@ -38,6 +43,7 @@ function initialize() {
 
 //     panorama: null,
 
+//     form: $('#post-form'),
 //     textBox: $('#textBox'),
 //     titleField: $('#titleField'),
 //     submitButton: $('#submit-post'),
