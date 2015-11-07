@@ -1,2 +1,51 @@
-<h1>Stories#show</h1>
-<p>Find me in app/views/stories/show.html.erb</p>
+<h1> <%=@story.title %> </h1>
+
+<p id="story_id"><%= @story.id %></p>
+
+<% @all_parsed_posts.each do |post| %> 
+
+	<div class="Post" data-lat="<%= post[2] %>" 
+		data-lng="<%= post[3] %>" data-pitch="<%= post[4] %>" 
+		data-heading="<%= post[5] %>" data-title="<%= post[0]%>" data-body="<%=post[1]%>">
+		<script type="text/javascript">
+			function makePanoMarker (lat, lng) {
+				Vicarious.makePanoMarker(lat, lng);
+			};
+			function makeMapMarker (lat, lng) {
+				Vicarious.makeMapMarker(lat, lng);
+			};
+			function makeInfoWindow () {
+				Vicarious.makeInfoWindow ();
+			};
+		</script>
+		<!--  -->
+	</div>
+
+<% end %>
+
+<h1>I'm the map I'm the map I'm the map I'm the map I'm the map I'm the map. I'm the map.</h1>
+
+
+<!-- THE MAP -->
+<div id="map-container">
+	<div id="map">
+	</div>
+	<div id="pano">
+	</div>
+</div>
+
+<div id="post-form">
+  <input type="text" id='titleField'><br>
+  <input type="text" id='textBox'><br>
+  <input type="submit" id='submit-post'>
+  <button id='cancel-post'>cancel</button>
+</div>
+
+<!-- <script type="text/javascript">
+	handler = Gmaps.build('Google');
+	handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+	  markers = handler.addMarkers(<%= raw @pins.to_json %>);
+	  handler.bounds.extendWith(markers);
+	  handler.fitMapToBounds();
+	});
+</script> -->

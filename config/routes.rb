@@ -1,14 +1,16 @@
 Rails.application.routes.draw do
 
-  get 'maps/index', to: 'maps#index', as: 'around_the_world'
-  post 'maps/create', to: 'maps#create_story', as: 'tag_the_world'
-  get 'stories/new', to: 'stories#new'
-  get 'stories/index', to: 'stories#index'
-  get 'stories/show', to: 'stories#show'
-  get 'stories/destroy', to: 'stories#destroy'
+  get '/allstories', to: 'stories#all'
+  get '/allposts', to: 'posts#all'
+  resources :users do 
+    resources :stories, shallow: true, only: [:new, :create, :update, :show, :destroy] do
+      resources :posts, shallow: true
+    end
+  end
+
   post '/sessions', to: 'sessions#create'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
-  resources :users
+
   root 'users#index'
 end

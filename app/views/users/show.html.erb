@@ -1,19 +1,19 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Username:</strong>
+  <h1>Username:</h1>
   <%= @user.username %>
 </p>
 
 <p>
-  <strong>About:</strong>
+  <h1>About:</h1>
   <%= @user.about %>
 </p>
 
 <p>
-	<strong>Stories:</strong>
-<% @titles.each do |title|%>
-	<p><%= title %> </p>
+	<h1>Stories:</h1>
+<% @stories.each do |story|%>
+	<p><%= story.title %> </p>
 <% end %>
 </p>
 

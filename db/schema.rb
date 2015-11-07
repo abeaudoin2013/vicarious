@@ -11,13 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151030160200) do
+ActiveRecord::Schema.define(version: 20151105173928) do
+
+  create_table "posts", force: :cascade do |t|
+    t.integer  "story_id"
+    t.text     "post_JSON"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "stories", force: :cascade do |t|
     t.integer  "user_id"
-    t.text     "story_JSON"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "title"
   end
 
   create_table "users", force: :cascade do |t|

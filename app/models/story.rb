@@ -1,19 +1,6 @@
 class Story < ActiveRecord::Base
 	belongs_to :user
+	has_many :posts, dependent: :destroy
 
-	def self.parse(text)
-		JSON.parse(text)
-	end
-
-	def self.go_through(stories)
-		titles = []
-	 	stories.each do |story|
-		 	pre_parse = story.story_JSON
-			parsed = Story.parse(pre_parse) 
-			title = parsed['title']
-			titles.push(title)
-		end
-		return titles
- 	end
-
+	accepts_nested_attributes_for :posts
 end

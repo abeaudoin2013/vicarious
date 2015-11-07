@@ -12,111 +12,155 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require underscore
+//= require gmaps/google
 //= require turbolinks
 //= require_tree .
 
-function initialize() {
-  var fenway = {lat: 42.345573, lng: -71.098326};
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: fenway,
-    zoom: 14
-  });
-  var panorama = new google.maps.StreetViewPanorama(
-      document.getElementById('pano'), {
-        position: fenway,
-        pov: {
-          heading: 34,
-          pitch: 10
-        }
+
+
+
+// //initialize is called after page loads in application.html.erb
+// function initialize() {
+//   //sets map with these coordinates
+//   var fenway = {lat: 42.345573, lng: -71.098326};
+//   var map = new google.maps.Map(document.getElementById('map'), {
+//     center: fenway,
+//     zoom: 14
+//   });
+//   var panorama = new google.maps.StreetViewPanorama(
+//       document.getElementById('pano'), {
+//         position: fenway,
+//         pov: {
+//           heading: 34,
+//           pitch: 10
+//         }
+//       });
+//   map.setStreetView(panorama);
+
+
+//   $('.posties').hide();
+  
+
+//   //Build markers
+  function Post(title, body, lat, lng, pitch, heading) {
+    this.title = title;
+    this.body = body;
+    this.lat = lat;
+    this.lng = lng;
+    this.pitch = pitch;
+    this.heading = heading;
+    this.makeMap = function(){
+      var self = this;
+
+      //make a location
+      var location = {lat: this.lat, lng: this.lng};
+
+      //make a map using that location
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: location,
+        zoom: 14
       });
-  map.setStreetView(panorama);
 
-  panorama.addListener('pov_changed', function() {
-  console.log(panorama.getPov().heading);
-  console.log(panorama.getPov().pitch);
-  });
-}
+      //make a panoram with same location
+      var panorama = new google.maps.StreetViewPanorama(
+        document.getElementById('pano'), {
+          position: location,
+          pov: {
+            heading: self.heading,
+            pitch: self.pitch
+          }
+        });
 
-// (function() {
+      //set map object to street view with street view object
+      map.setStreetView(panorama);
 
-//   var Vicarious = {
+      //make an empty infoWindow
+      var infowindow = new google.maps.InfoWindow({
+      });
 
-//     panorama: null,
+      //make a marker
+      var marker = new google.maps.Marker({
+        position: {lat: self.lat, lng: self.lng}
+      });
 
-//     form: $('#post-form'),
-//     textBox: $('#textBox'),
-//     titleField: $('#titleField'),
-//     submitButton: $('#submit-post'),
-//     cancelButton: $('#cancel-post'),
+      //tell the marker to go to the panorama view
+      //FIGURE OUT HOW TO GET IT TO ALSO DISPLAY ON REGULAR MAP
+      marker.setMap(panorama);
 
-//     panoramaEvents: {
-//       positionChanged: 'position_changed',
-//       povChanged: 'pov_changed'
-//     },
+      //add listener to map
+      marker.addListener('click', function(){
+        infowindow.setContent('<div id="posty"><h1>'  + self.title + '</h1> <br> <p>' + self.body + '</p></div>');
+        infowindow.open(panorama, marker);
+          $('#posty').click(function(){
+             var next_post = new Post('Moooo', 'says the cow', 43.613146,-70.213913, 40, 10);
+             next_post.makeMap();
+          });
+      });
+    };
+  };
 
-//     routes: {
-//       posts: {
-//         POST: 'posts/create'
-//       }
-//     },
 
-//     init: function () {
 
-//       if (panorama) {
-//         return;
-//       }
+//   //get the data
+//   var query_title = $('#title').html();
+//   var query_body = $('#body').html();
+//   var query_lat = $('#lat').html();
+//   var query_lng = $('#lng').html();
+//   var query_pitch = $('#pitch').html();
+//   var query_heading = $('#heading').html();
 
-//       this.panorama = new ...;
-//       this.bindPanorama();
-//     },
+//   //parse the lat, lng, pitch, heading
+//   var parsed_lat = parseFloat(query_lat)
+//   var parsed_lng = parseFloat(query_lng)
+//   var parsed_pitch = parseFloat(query_pitch)
+//   var parsed_heading = parseFloat(query_heading)
 
-//     bindPanorama: function () {
 
-//       var self = this;
+//   //Use parsed variables and query_title and post to build object instance
+//   var test_post = new Post(query_title, query_body, parsed_lat, parsed_lng, parsed_heading, parsed_pitch)
+//   test_post.makeMap();
 
-//       // This listens for a click. The text box is hidden right now.
-//       this.panorama.addListener(this.panoramaEvents.positionChanged, function () {
-//         self.showTextBox();
-//       });
+  
 
-//       // This listens for a click. The text box is hidden right now.
-//       this.panorama.addListener(this.panoramaEvents.povChanged, function () {
-//         self.showTextBox();
-//       });
 
-//       this.submitButton.click(function () {
 
-//         var data = {
-//           title: self.titleField.text(),
-//           location: this.panorama.getPosition(),
-//           pov: this.panorama.getPov();
+
+//     //JSON BUILDER
+//     $('#submit-post').click(function(){
+        
+//       var vicarious = {
+//         post_data: {
+//         heading: panorama.getPov().heading,
+//         pitch: panorama.getPov().pitch,
+//         lat: panorama.getPosition().lat(),
+//         lng: panorama.getPosition().lng(),
+//         title: $('#titleField').val(),
+//         body: $('#textBox').val()
+//           }
 //         };
 
-//         self.createPost(data);
-//       });
+//       var storyId = $('#story_id').html();
 
-//       this.cancelButton.click(function() {
-//         self.hideTextBox();
-//       });
-//     },
+//       var link = '/stories/' + storyId + '/posts'
 
-//     showTextBox: function() {
-//       this.textBox.show();
-//     },
+//       function ajaxCaller(vicarious){
+//         var b = $.ajax({
+//           type: 'POST',
+//           url: link,
+//           dataType: 'json',
+//           data: {
+//             post: {
+//               post_JSON: JSON.stringify(vicarious.post_data)
+//             }
+//           }
+//         })
+//         b.done($('#titleField').val(''),
+//                $('#textBox').val(''))
+      
+//       }
 
-//     hideTextBox: function () {
-//       this.textBox.hide();
-//     },
+//       ajaxCaller(vicarious)
 
-//     createPost: function(data) {
-//       $.POST({
-//         url: this.routes.posts.POST,
-//         data: data
-//       });
-//     }
-
-//   };
-
-// }());
-
-// Vicarious.init();
+//     });
+// };

@@ -1,4 +1,4 @@
-<h1>Listing Stories</h1>
-<% @titles.each do |title|%>
-	<p><%= title %> </p>
+<h1><%=@user.username %>'s stories</h1>
+<% @stories.each do |story| %>
+	<p>"<%= story.title%>"</p>
 <% end %>
