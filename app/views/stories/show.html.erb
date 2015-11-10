@@ -7,17 +7,6 @@
 	<div class="Post" data-lat="<%= post[2] %>" 
 		data-lng="<%= post[3] %>" data-pitch="<%= post[4] %>" 
 		data-heading="<%= post[5] %>" data-title="<%= post[0]%>" data-body="<%=post[1]%>">
-		<script type="text/javascript">
-			function makePanoMarker (lat, lng) {
-				Vicarious.makePanoMarker(lat, lng);
-			};
-			function makeMapMarker (lat, lng) {
-				Vicarious.makeMapMarker(lat, lng);
-			};
-			function makeInfoWindow () {
-				Vicarious.makeInfoWindow ();
-			};
-		</script>
 		<!--  -->
 	</div>
 
@@ -41,11 +30,7 @@
   <button id='cancel-post'>cancel</button>
 </div>
 
-<!-- <script type="text/javascript">
-	handler = Gmaps.build('Google');
-	handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
-	  markers = handler.addMarkers(<%= raw @pins.to_json %>);
-	  handler.bounds.extendWith(markers);
-	  handler.fitMapToBounds();
-	});
-</script> -->
+<div>
+	<input type="text" id='addressField'>
+	<button type="text" id="submitAddress" onclick="Vicarious.search()">search for address</button>
+</div>

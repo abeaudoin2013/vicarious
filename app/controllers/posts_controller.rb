@@ -11,7 +11,9 @@ class PostsController < ApplicationController
 
   def create
     # Comes in from JS
-    @story = Story.find(params[:story_id])
+
+    @story = Story.find_by(params[:id])
+
   	@post = Post.create(post_params)
   	if @post.save
       render nothing: true
@@ -20,25 +22,29 @@ class PostsController < ApplicationController
     end
   end
 
-  def new 
-    @post = Post.new
-  end
+  # def new 
+  #   @post = Post.new
+  # end
 
-  def update
-  	@post = Post.find(params[:id])
-  	respond_to do |format|
-			if @element.update(element_params)
-				format.js {render nothing: true}
-			else
-				format.js {render nothing: true}
-			end
-		end
-  end
+  # def update
+  # 	@post = Post.find(params[:id])
+  # 	respond_to do |format|
+		# 	if @element.update(element_params)
+		# 		format.js {render nothing: true}
+		# 	else
+		# 		format.js {render nothing: true}
+		# 	end
+		# end
+  # end
 
   private
 
+  def set_user
+    @user = User.find(params[:id])
+  end
+
   def post_params
-  	params.require(:post).permit(:post_JSON).merge(story: @story)
+  	params.require(:post).permit(:post_JSON).merge(story: @story, user: current_user)
   end
 
 end

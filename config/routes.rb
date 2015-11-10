@@ -2,10 +2,13 @@ Rails.application.routes.draw do
 
   get '/allstories', to: 'stories#all'
   get '/allposts', to: 'posts#all'
+  
   resources :users do 
-    resources :stories, shallow: true, only: [:new, :create, :update, :show, :destroy] do
-      resources :posts, shallow: true
+    
+    resources :stories, shallow: :true, only: [:new, :show, :destroy, :create] do
+      resources :posts, only: [:create]
     end
+
   end
 
   post '/sessions', to: 'sessions#create'

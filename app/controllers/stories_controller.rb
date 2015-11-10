@@ -5,7 +5,7 @@ class StoriesController < ApplicationController
     if @user = current_user 
       @story = Story.new
     else
-      redirect_to login_path, notice: "You gotta login to do that"
+      redirect_to login_path, notice: "You gotta login to do that."
     end
   end
 
@@ -14,22 +14,24 @@ class StoriesController < ApplicationController
   end
 
   def create
+
     @story = Story.create(story_params)
 
     if @story.save
-      redirect_to @story
+      redirect_to story_path(@story.id)
     else
       redirect_to root_path, notice: 'There was a problem'
     end
+
   end 
 
-  def update
-    if @story.update(story_params)
-      redirect_to user_stories_path
-    else
-      redirect_to :back
-    end
-  end
+  # def update
+  #   if @story.update(story_params)
+  #     redirect_to user_stories_path
+  #   else
+  #     redirect_to :back
+  #   end
+  # end
 
   def show
     @post = Post.new
@@ -48,12 +50,18 @@ class StoriesController < ApplicationController
   end
 
   private
+   
     def set_story
-      @story = Story.find(params[:id])
-    end 
+      begin 
+        @story = Story.find(params[:id])
+      rescue
+        flash[:notice] = "We can't find that post"
+        redirect_to allstories_path
+      end
+    end
   
-  def story_params
-    params.require(:story).permit(:title).merge(user: current_user)
-  end
+    def story_params
+      params.require(:story).permit(:title).merge(user: current_user)
+    end
   
 end

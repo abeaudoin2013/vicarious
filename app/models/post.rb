@@ -1,5 +1,6 @@
 class Post < ActiveRecord::Base
 	belongs_to :story
+	belongs_to :user
 
 	def self.parse(text)
 		JSON.parse(text)
