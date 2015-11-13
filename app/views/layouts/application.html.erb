@@ -31,40 +31,26 @@
 
 		      </button>
 
-		      <a class="navbar-brand" href="#">Brand</a>
+		      <a class="navbar-brand" href="/allstories" id="brand"><img src="http://www.clker.com/cliparts/W/z/k/U/R/w/white-and-black-globe-hi.png" id="brand_img" width="40px"> <p class="brand_text">V I C A R I O U S</p> </a>
 
 		    </div>
 
-		    <!-- Collect the nav links, forms, and other content for toggling -->
-		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			    <ul class="nav navbar-nav navbar-right" id="nav_right">
 
-		      <ul class="nav navbar-nav navbar-right">
-
-		        <li class="dropdown">
-		          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-		          <ul class="dropdown-menu">
-
-		          	<% if current_user %>
-			          	<li><%=link_to "Profile", user_path(current_user.id) %></li>
-									<li><%=link_to "Log Out", logout_path, method: :delete %></li>
-		        		<% else %>
-		        			<li><%= link_to "Sign Up", new_user_path %></li>
-									<li><%= link_to "Log In", login_path %></li>
-								<% end %>
-									
-		          </ul>
-
-		        </li>
+	      		<ul class="nav nav-pills">
+	      			<% if current_user != nil %>
+								<li role="presentation" class="active" id="toggleNewStory"><%= link_to "Start A New Story", new_user_story_path(current_user.id) %></li>
+								<li role="presentation" class="active"><%=link_to "Profile", user_path(current_user.id) %></li>
+								<li role="presentation" class="active"><%=link_to "Log Out", logout_path, method: :delete %></li>
+							<% else %>
+								<li role="presentation" class="active"><%= link_to "Sign Up", new_user_path %></li>
+								<li role="presentation" class="active"><%= link_to "Log In", login_path %></li>
+							<% end %>
+						</ul>
 
 		      </ul>
 
-		    </div><!-- /.navbar-collapse -->
-
-		    <% if flash[:notice] %>
-					<div class="notice"><%=flash[:notice]%></div> 
-				<% end %>
-
-		  </div><!-- /.container-fluid -->
+		  </div>
 		</nav>
 	</header>
 

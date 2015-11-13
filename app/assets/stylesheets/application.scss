@@ -18,7 +18,29 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+// NAV BAR
+#brand {
+	margin-top: -10px;
+	margin-left: 0px;
+}
+.brand_text {
+	display: inline-block;
+}
+#brand_img {
+	display: inline-block;
+}
+#dropdown {
+	font-size: 2em;
+}
+#new_story_pill { 
+	display: inline-block;
+}
+#nav_right {
+  margin-top: 4px;
+  margin-right: 2.5%;
+}
 
+// MAP STUFF
 #map {
 	height: 200px;
 	position: relative;
@@ -27,17 +49,27 @@
 }
 #pano {
 	width: 100%;
-	height: 100vh;
+	height: 80vh;
 	display: inline-block;
 	border: 1px solid gray;
 }
+#pano-container {
+	margin-top: 2.5%;
+}
 
+// Post Forms
+#toggelGeo {
+	display:inline-block;
+}
+.delete_story {
+	display:inline-block;
+}
 #toggelPostForm {
 	position: relative;
 	z-index: 9;
 }
 #post-form {
-  width: 90%;
+  width: 100%;
 	position: absolute;
 	z-index: 30;
 	max-height: 100%;
@@ -108,6 +140,7 @@
 	outline: none;
 }
 
+// User profile page
 #user_show_container {
 	border-right: 1px solid black;
 	border-left: 1px solid black;	
@@ -135,22 +168,100 @@
 .user_stories_link {
 	text-decoration: none;
 	font-size: 2em;
-	color: #70757A;
+	color: white;
+  font-weight: 100;
+	font-family: "Avalon",sans-serif;
+	margin-top: 5%;
 }
 .user_stories_link:hover {
 	text-decoration: none;
-	color: white;
+	color: black;
+}
+.story_link {
+	max-width: 100%;
 }
 
+//New Story
+.newStory {
+  text-align: center;
+  border: 1px solid white;
+  height: 90vh;
+  color: white;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://images.unsplash.com/photo-1429260350537-7db124ce78ac?fit=crop&fm=jpg&h=800&ixlib=rb-0.3.5&q=80&w=1450);
+}
+.newStoryInfo {
+	font-family: "Avalon",sans-serif;
+  font-weight: 900;
+  font-size: 4.5em;
+  letter-spacing: -0.2px;
+  line-height: .95;
+  color: white;
+  margin-top: 20vh;
+}
+#newStory {
+	color: black;
+}
+#story_title {
+	color: black;
+}
+#story_title:focus {
+	outline-width: 0;
+	outline: none;
+}
+.submitter {
+	color: black;
+}
+.newStoryCancel {
+	color: black;
+}
+
+
+// Landing page
 #aboutLander {
-  background-color: aliceblue;
-  height: 80vh;
+	background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), url(https://images.unsplash.com/photo-1415125721330-116ba2f81152?fit=crop&fm=jpg&h=800&ixlib=rb-0.3.5&q=80&w=1425);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 95vh;
+  overflow-y: scroll;
+  width: 95vw;
+  top: 2.5%;
+  left: 2.5%;
+  margin: 0 auto;
+  text-align: center;
   border-bottom: 1px solid gray;
-  position: absolute;
+  border-radius: 5px;
+  border: 3px solid #181817;
+  position: fixed;
+  padding-top: 4%;
   z-index: 20;
+  font-family: "Avalon",sans-serif;
+  font-weight: 900;
+  font-size: 4.5em;
+  letter-spacing: -0.2px;
+  line-height: .95;
+  color: white;
+  // text-shadow: 0 1px 12px black;
+}
+.landerColumns {
+	margin-top: 10vh;
+	margin-bottom: 5vh;
 }
 .gotIt {
 	margin: 0 auto;
+  width: 100%;
+  height: 60px;
+  background: rgba(255, 255, 255, .8);
+  border-radius: 10px;
+  box-shadow: none;
+  margin-top: 32vh;
+  color: black;
+  border: 1px solid gray;
+}
+#landing_picture1 {
+	border: 1px solid gray;
+	margin-bottom: 5vh;
+	display: block;
+	margin: 3% auto;
 }
 
 

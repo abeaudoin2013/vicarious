@@ -28,11 +28,9 @@
 
 			<h2><%= @user.username %>'s stories</h2>
 
-			<h4><%= link_to 'Make new story!' , new_user_story_path(@user.id) %></h4>
-
 			<% @centers.each do |center|%>
 
-				<div style="background: url('http://maps.googleapis.com/maps/api/staticmap?center=<%=center[0]%>,<%=center[1]%>&zoom=13&scale=1&size=200x200&maptype=roadmap&format=png&visual_refresh=true')" class="user_stories"><b><%=link_to center[2], story_path(center[3]), class: 'user_stories_link' %></b></div>
+			 <div style="background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('http://maps.googleapis.com/maps/api/staticmap?center=<%=center[0]%>,<%=center[1]%>&zoom=13&scale=1&size=200x200&maptype=roadmap&format=png&visual_refresh=true')" class="user_stories"><%=link_to center[2], story_path(center[3]), class: 'user_stories_link' %></div>
 
 			<% end %>
 

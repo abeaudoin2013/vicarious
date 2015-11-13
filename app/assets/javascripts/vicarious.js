@@ -1,3 +1,4 @@
+
 var Vicarious = {
 
 
@@ -57,10 +58,7 @@ var Vicarious = {
 
   	this.plotPosts();
 
-    if (this.lander != null) {
-      this.activateLander();
-      console.log('here I am');
-    }
+    this.activateLander();
 
     this.setAnimations();
 
@@ -85,8 +83,8 @@ var Vicarious = {
     } else {
 
       this.initialCenter = {
-        lat: 43,
-        lng: -20
+        lat: 37.7833,
+        lng: -122.4167
       };
 
     }
@@ -160,15 +158,17 @@ var Vicarious = {
       };
 
       var mapMarker = new google.maps.Marker({
-        position: center
+        position: center,
+        animation: google.maps.Animation.DROP
       });
 
       var panoMarker = new google.maps.Marker({
-        position: center
+        position: center,
+        animation: google.maps.Animation.DROP
       });
 
       var infoWindow = new google.maps.InfoWindow({
-        content: '<div class="posty"><h1>'  + post.title + '</h1> <p>' + post.body + '</p></div><br><a href="/users/' + post.userId + '"> by ' + post.username + '</a>' 
+        content: '<div class="posty"><h1>'  + post.title + '</h1> <p>' + post.body + '</p></div><br><a href="/users/' + post.userId + '"> by ' + post.username + '</a>'
       });
 
       mapMarker.setMap(this.map);
@@ -184,6 +184,7 @@ var Vicarious = {
       this.infoWindows.push(infoWindow);
 
       this.POVs.push(pov);
+
       
       panoMarker.addListener('click', function () {
 
@@ -224,7 +225,7 @@ var Vicarious = {
     var j = this.POVs.length - 1,
       i = index + 1,
       self = this,
-      nextPOV = this.POVs[i],
+      // nextPOV = this.POVs[i],
       nextCenter = this.centers[i],
       nextMarker = this.mapMarkers[i],
       nextInfo = this.infoWindows[i],
@@ -245,7 +246,7 @@ var Vicarious = {
 
     this.map.setCenter(nextCenter);
 
-    this.panorama.setPov(nextPOV);
+    // this.panorama.setPov(nextPOV);
 
     this.panorama.setPosition({
 
@@ -367,7 +368,7 @@ var Vicarious = {
 
     this.lander.toggle('drop', options, 500);
 
-    $('.gotIt').click(function () {
+    this.lander.click(function () {
       self.lander.toggle('drop', options, 500);
     });
 
@@ -445,9 +446,7 @@ var Vicarious = {
 
     });
 
-
   }
-
 
 };
 

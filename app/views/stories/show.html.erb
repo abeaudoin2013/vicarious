@@ -32,6 +32,10 @@
 	  <button id='cancel-post'>cancel</button>
 	</div>
 
+	<div class="delete_story">
+		<button id='delete_button'><%= link_to 'delete', @story, method: :delete %></button>
+	</div>
+
 <% end %>
 	
 	<div id="pano-container" class='container'>

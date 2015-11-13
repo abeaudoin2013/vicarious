@@ -1,11 +1,20 @@
-<div class='new_story'>
-	<%= form_for @story, url: user_stories_path do |f| %>
-	<p>
-		<%= f.label :title, "Title of Your Story" %>
-		<%= f.text_field :title %>
-	</p>
-	<p>
-		<%= f.submit "Save", class: 'submitter' %>
-	</p>
-	<% end %>
+<div class="container-fluid" id="newStoryContainer">
+	<div class="row">
+		<div class="col-md-12">
+			<div class='newStory'>
+				<div class="newStoryInfo">
+
+					<%= form_for @story, url: user_stories_path do |f| %>
+					<p>
+						<%= f.text_field :title, placeholder: 'Title of the Story' %>
+					</p>
+						<%= f.submit "Save", class: 'submitter' %>
+					<% end %>
+
+					<button class='newStoryCancel'>Cancel</button>
+					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

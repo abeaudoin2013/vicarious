@@ -48,7 +48,9 @@ class StoriesController < ApplicationController
   # end
 
   def destroy
+    user_id = @story.user_id
     @story.destroy
+    redirect_to user_path(user_id)
   end
 
   private
