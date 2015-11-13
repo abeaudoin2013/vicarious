@@ -1,4 +1,6 @@
-<h1> <%=@story.title %> </h1>
+<!-- <h1> <%=@story.title %> </h1> -->
+
+
 
 <p id="story_id"><%= @story.id %></p>
 
@@ -6,31 +8,75 @@
 
 	<div class="Post" data-lat="<%= post[2] %>" 
 		data-lng="<%= post[3] %>" data-pitch="<%= post[4] %>" 
-		data-heading="<%= post[5] %>" data-title="<%= post[0]%>" data-body="<%=post[1]%>">
-		<!--  -->
+		data-heading="<%= post[5] %>" data-title="<%= post[0]%>" data-body="<%=post[1]%>" 
+		data-username="<%=post[6]%>" data-userId="<%=post[7]%>">
 	</div>
 
 <% end %>
 
-<h1>I'm the map I'm the map I'm the map I'm the map I'm the map I'm the map. I'm the map.</h1>
-
 
 <!-- THE MAP -->
-<div id="map-container">
-	<div id="map">
-	</div>
-	<div id="pano">
-	</div>
-</div>
 
-<div id="post-form">
-  <input type="text" id='titleField'><br>
-  <input type="text" id='textBox'><br>
-  <input type="submit" id='submit-post'>
-  <button id='cancel-post'>cancel</button>
-</div>
+<% if current_user and current_user == @user %>
 
-<div>
-	<input type="text" id='addressField'>
-	<button type="text" id="submitAddress" onclick="Vicarious.search()">search for address</button>
-</div>
+	<div id="locationFinder">
+		<input type="text" id='addressField'>
+	</div>
+
+	<button id="toggleGeo">Search</button>
+	<button id="toggelPostForm">Make post</button>
+	
+	<div id="post-form">
+		<input type="text" id='titleField' placeholder="title"><br>
+		<input type="textarea" id='textBox' placeholder="What happened here?"><br>
+	  <button id='cancel-post'>cancel</button>
+	</div>
+
+<% end %>
+	
+	<div id="pano-container" class='container'>
+
+		<div id="pano">
+
+			<div id="map-container" class='row'>
+
+				<div id="map" class='col-md-5'>
+
+				</div>
+
+				<div class='col-md-7'>
+
+					
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

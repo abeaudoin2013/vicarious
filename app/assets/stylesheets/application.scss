@@ -1,0 +1,163 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require jquery-ui
+ *
+ @import
+ */
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+
+#map {
+	height: 200px;
+	position: relative;
+	z-index: 5;
+	border: 1px solid gray;
+}
+#pano {
+	width: 100%;
+	height: 100vh;
+	display: inline-block;
+	border: 1px solid gray;
+}
+
+#toggelPostForm {
+	position: relative;
+	z-index: 9;
+}
+#post-form {
+  width: 90%;
+	position: absolute;
+	z-index: 30;
+	max-height: 100%;
+	background-color: rgba(255, 255, 255, .8);
+	border: 1px solid gray;
+}
+#titleField {
+	margin: 0 auto;
+	display: block;
+	width: 90%;
+	text-align: center;
+	border: none;
+	font-size: 100%;
+	font-style: bold;
+	border-radius: 15px;
+	overflow: visible;
+	max-height: 25%;
+	height: 10vh;
+	padding: 15px;
+	background-color: rgba(255, 255, 255, 0);
+}
+#titleField:focus {
+	outline-width: 0;
+	outline: none;
+}
+#textBox {
+	margin: 0 auto;
+	display: block;
+	width: 90%;
+	text-align: center;
+	border: none;
+	font-size: 4em;
+	border-radius: 15px;
+	overflow: visible;
+	max-height: 100%;
+	height: 30vh;
+	padding: 15px;
+	background-color: rgba(255, 255, 255, 0);
+}
+#textBox:focus {
+	outline-width: 0;
+	outline: none;
+}
+
+/*Address search drop down*/
+#locationFinder {
+	width: 100%;
+	position: absolute;
+	z-index: 30;
+	height: 40%;
+	background-color: rgba(255, 255, 255, .8);
+}
+#addressField {
+	margin: 0 auto;
+	display: block;
+	border: none;
+	font-size: 4em;
+	border-radius: 15px;
+	overflow: visible;
+	max-height: 100%;
+	height: 50%;
+	text-align: center;
+	width: 90%;
+	background-color: rgba(255, 255, 255, 0);
+}
+#addressField:focus {
+	outline-width: 0;
+	outline: none;
+}
+
+#user_show_container {
+	border-right: 1px solid black;
+	border-left: 1px solid black;	
+	padding-left: 3%;
+	padding-right: 3%;
+}
+#profile_picture {
+	border: 1px solid gray;
+}
+.user_stories {
+  width: 200px;
+  height: 178px;
+  text-align: center;
+  padding: 5px;
+  overflow: hidden;
+  display: inline-block;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  background-size: cover;
+  margin-bottom: 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.user_stories_link {
+	text-decoration: none;
+	font-size: 2em;
+	color: #70757A;
+}
+.user_stories_link:hover {
+	text-decoration: none;
+	color: white;
+}
+
+#aboutLander {
+  background-color: aliceblue;
+  height: 80vh;
+  border-bottom: 1px solid gray;
+  position: absolute;
+  z-index: 20;
+}
+.gotIt {
+	margin: 0 auto;
+}
+
+
+
+
+
+
+
+
+

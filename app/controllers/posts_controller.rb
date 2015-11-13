@@ -12,7 +12,7 @@ class PostsController < ApplicationController
   def create
     # Comes in from JS
 
-    @story = Story.find_by(params[:id])
+    # @story = Story.find_by(params[:id])
 
   	@post = Post.create(post_params)
   	if @post.save
@@ -44,7 +44,7 @@ class PostsController < ApplicationController
   end
 
   def post_params
-  	params.require(:post).permit(:post_JSON).merge(story: @story, user: current_user)
+  	params.require(:post).permit(:post_JSON, :story_id).merge(user: current_user)
   end
 
 end

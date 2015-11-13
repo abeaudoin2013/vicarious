@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
   post '/sessions', to: 'sessions#create'
   get 'login', to: 'sessions#new', as: 'login'
-  get 'logout', to: 'sessions#destroy', as: 'logout'
+  delete 'logout', to: 'sessions#destroy', as: 'logout'
 
-  root 'users#index'
+  root 'stories#all'
 end

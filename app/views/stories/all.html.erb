@@ -1,3 +1,65 @@
-<% @stories.each do |story|%>
-	<p><%= story.title %> by <%= story.user.username %></p>
+
+
+<% @all_parsed_posts.each do |post| %> 
+
+	<div class="Post" data-lat="<%= post[2] %>" 
+		data-lng="<%= post[3] %>" data-pitch="<%= post[4] %>" 
+		data-heading="<%= post[5] %>" data-title="<%= post[0]%>" data-body="<%=post[1]%>"
+		data-username="<%=post[6]%>" data-userId="<%=post[7]%>">
+		<!--  -->
+	</div>
+
+
+
 <% end %>
+
+
+
+<div class="container-fluid" id='aboutLander'>
+	<div class="row">
+		
+		<div class="col-md-4">
+			<h2>Hey. Welcome to Vicarious. An interactive travel blog</h2>
+			<img src="">
+		</div>
+
+		<div class="col-md-4">
+			<h2>Tag the world anywhere on (google logo) maps.</h2>
+			<img src="">
+		</div>
+		
+		<div class="col-md-4">
+			<h2>Share your fondest memories</h2>
+			<img src="">
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<button class='gotIt'>Got it!</button>
+		</div>
+	</div>
+</div>
+
+
+<!-- THE MAP -->
+
+	<div id="pano-container" class='container'>
+
+		<div id="pano">
+
+			<div id="map-container" class='row'>
+
+				<div id="map" class='col-md-2'>
+
+				</div>
+
+				<div class='col-md-10'>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>

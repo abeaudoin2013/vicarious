@@ -5,8 +5,8 @@ var Vicarious = {
 
 	// This is fenway park
 	initialCenter: {
-		lat: 42.345573,
-	  lng: -71.098326
+		lat: null,
+	  lng: null
 	},
 
   newPOV: [],
@@ -29,18 +29,25 @@ var Vicarious = {
 
   centers: [],
 
+  lander: null,
+
 	// markerData: {},
 
   init: function () {
+
+    var self = this;
 
   	if (this.initialized) {
   		console.log('already initialized');
   		return false;
 
   	}
-
-  	//This is the array of posts
  
+    this.setPosts();
+
+    this.setLander();
+
+    this.setInitialCenter();
 
   	this.initializeMap();
 
@@ -48,34 +55,42 @@ var Vicarious = {
 
     this.initializeGeocoder();
 
-  	this.setPosts();
-
   	this.plotPosts();
 
-    // this.aroundTheWorld();
+    if (this.lander != null) {
+      this.activateLander();
+      console.log('here I am');
+    }
 
-    var self = this;
-
-    // $('.posty').click(function () {
-
-    //   // self.aroundTheWorld();
-    //   // console.log('hi')
-
-    // });
-
-    $('#submit-post').click(function (){
-
-      self.makePost();
-
-    });
-
-    $('submitAddress').click(function (){
-      this.search
-    });
+    this.setAnimations();
 
 
   	this.initialized = true;
     return true;
+  },
+
+  setInitialCenter: function () {
+
+    var firstPost = null;
+
+    if (this.posts.length) {
+
+      firstPost = this.posts[0];
+
+      this.initialCenter = {
+        lat: firstPost.lat,
+        lng: firstPost.lng
+      }; 
+
+    } else {
+
+      this.initialCenter = {
+        lat: 43,
+        lng: -20
+      };
+
+    }
+
   },
 
   initializeMap: function () {
@@ -90,10 +105,9 @@ var Vicarious = {
   initializePanorama: function () {
   	this.panorama = new google.maps.StreetViewPanorama(
       document.getElementById('pano'), {
-        position: this.initialCenter,
-        pov: {
-          heading: 34,
-          pitch: 10
+        position: {
+          lat: this.initialCenter.lat - .0002,
+          lng: this.initialCenter.lng - .0002
         }
       });
 	  this.map.setStreetView(this.panorama);
@@ -104,51 +118,62 @@ var Vicarious = {
   },
 
   setPosts: function () {
-  	this.posts = $('.Post');
+  	
+    var $posts = $('.Post');
+
+    $.each($posts, function(index, post) {
+      
+      var $post = $(post);
+
+      this.posts.push({
+        lat: $post.data('lat'),
+        lng: $post.data('lng'),
+        pitch: $post.data('pitch'),
+        heading: $post.data('heading'),
+        title: $post.data('title'),
+        body: $post.data('body'),
+        username: $post.data('username'),
+        userId: $post.data('userid')
+      });
+
+    }.bind(this));
+
   },
 
   plotPosts: function () {
 
+    var self = this;
+
   	$.each(this.posts, function(index, post) {
       
-      var $post = $(post),
-
-      lat = $post.data('lat'),
-
-      lng = $post.data('lng'),
-
-      pitch = $post.data('pitch'),
-
-      heading = $post.data('heading'),
-
-      title = $post.data('title'),
-
-      body = $post.data('body'),
-      
+        
       //Will these make the info windows sync in chronological order?
 
-      center = {
-        lat: lat,
-        lng: lng
-      },
+      var center = {
+        lat: post.lat,
+        lng: post.lng
+      };
 
-      mapMarker = new google.maps.Marker({
-        position: {lat: lat, lng: lng},
-      }),
+      var pov = {
+        heading: post.heading,
+        pitch: post.pitch
+      };
 
-      panoMarker = new google.maps.Marker({
-        position: {lat: lat, lng: lng},
-      }),
+      var mapMarker = new google.maps.Marker({
+        position: center
+      });
 
-      infoWindow = new google.maps.InfoWindow({
-        content: '<div class="posty"><h1>'  + title + '</h1> <p>' + body + '</p></div>'
-      }),
+      var panoMarker = new google.maps.Marker({
+        position: center
+      });
 
-      setMap = mapMarker.setMap(this.map),
-      
-      setPano = panoMarker.setMap(this.panorama),
+      var infoWindow = new google.maps.InfoWindow({
+        content: '<div class="posty"><h1>'  + post.title + '</h1> <p>' + post.body + '</p></div><br><a href="/users/' + post.userId + '"> by ' + post.username + '</a>' 
+      });
 
-      self = this;
+      mapMarker.setMap(this.map);
+
+      panoMarker.setMap(this.panorama);
 
       this.centers.push(center);
 
@@ -158,12 +183,13 @@ var Vicarious = {
 
       this.infoWindows.push(infoWindow);
 
-      this.POVs.push({heading, pitch});
-
+      this.POVs.push(pov);
       
       panoMarker.addListener('click', function () {
 
         infoWindow.open(self.panorama, panoMarker);
+
+        //auto pan has to go here
         
         $('.posty').click(function () {
           
@@ -181,7 +207,7 @@ var Vicarious = {
       // this.mapMarkersArr.push(mapMarker);
 
 
-    }.bind(this))
+    }.bind(this));
   },
 
   aroundTheWorld: function (index) {
@@ -196,26 +222,21 @@ var Vicarious = {
     
 
     var j = this.POVs.length - 1,
+      i = index + 1,
+      self = this,
+      nextPOV = this.POVs[i],
+      nextCenter = this.centers[i],
+      nextMarker = this.mapMarkers[i],
+      nextInfo = this.infoWindows[i],
+      currentInfo = {};
 
-    i = index + 1,
+    if (index === -1) {
 
-    self = this,
-
-    nextPOV = this.POVs[i],
-
-    nextCenter = this.centers[i],
-
-    nextMarker = this.mapMarkers[i],
-
-    nextInfo = this.infoWindows[i];
-
-    if (index = -1) {
-
-      var currentInfo = this.infoWindows[j];
+      currentInfo = this.infoWindows[j];
 
     } else {
 
-      var currentInfo = this.infoWindows[index];
+      currentInfo = this.infoWindows[index];
 
     };
 
@@ -226,7 +247,12 @@ var Vicarious = {
 
     this.panorama.setPov(nextPOV);
 
-    this.panorama.setPosition(nextCenter);
+    this.panorama.setPosition({
+
+      lat: nextCenter.lat - .0002, 
+      lng: nextCenter.lng - .0002
+    
+    });
 
     nextInfo.open(this.panorama, nextMarker);
 
@@ -266,26 +292,33 @@ var Vicarious = {
 
         };
 
+    var titleTest = vicariousPoster.post_data.title;
+    var titleBody = vicariousPoster.post_data.body;
+
     var storyId = $('#story_id').html();
+
+    var storyInt = parseInt(storyId);
+
 
     var link = '/stories/' + storyId + '/posts'
 
     function ajaxCaller(vicarious){
-      var b = $.ajax({
+      var ajaxRequest = $.ajax({
         type: 'POST',
         url: link,
         dataType: 'json',
         data: {
           post: {
-            post_JSON: JSON.stringify(vicarious.post_data)
+            post_JSON: JSON.stringify(vicarious.post_data),
+            story_id: storyInt
           }
         }
-      })
-      b.done($('#titleField').val(''),
-             $('#textBox').val(''))
+      });
+      ajaxRequest.done($('#titleField').val(''), $('#textBox').val(''));
     
     }
-
+    console.log(titleTest);
+    console.log(titleBody);
     ajaxCaller(vicariousPoster);
   },
 
@@ -304,15 +337,117 @@ var Vicarious = {
         
         self.map.setCenter(results[0].geometry.location);
 
+        self.panorama.setPosition(results[0].geometry.location);
+
       } else {
 
-        alert('Geocode was not successful for the following reason: ' + status);
+        alert('We could not find that address. Sorry. Try again. ' + status);
 
       }
    
     });
 
+  },
+
+  setLander: function () {
+
+    this.lander = $('#aboutLander');
+
+    this.lander.hide();
+
+  },
+
+  activateLander: function () {
+  
+    var self = this;
+
+    var options = {
+      direction: 'up'
+    };
+
+    this.lander.toggle('drop', options, 500);
+
+    $('.gotIt').click(function () {
+      self.lander.toggle('drop', options, 500);
+    });
+
+  },
+
+  setAnimations: function () {
+
+    var options = {
+      direction: "up"
+    };
+
+    var self = this;
+
+    $('#story_id').hide();
+    $( "#locationFinder" ).hide();
+    $('#post-form').hide();
+
+    $('#toggelPostForm').click(function () {
+      
+      $('#toggleGeo').hide();
+
+      $('#post-form').toggle("drop", options, 500 );  
+      $('#titleField').focus();
+
+
+      $('#cancel-post').click(function () {
+
+        $('#post-form').toggle("drop", options, 500);
+        $('#toggleGeo').show();
+
+      });
+
+
+      $('#textBox').keypress(function (e) {
+
+        var key = e.which;
+
+
+        if (key === 13) {
+
+          self.makePost();
+
+          $('#post-form').toggle("drop", options, 500 ); 
+          $('#toggleGeo').show();
+
+        }
+
+
+      });
+
+    });
+
+
+    $('#toggleGeo').click(function() {
+
+      $("#locationFinder").toggle( "drop", options, 500 );
+
+      $("#addressField").focus();
+
+      $("#addressField").keypress(function (e) {
+
+          var key = e.which;
+          
+          if(key === 13) {
+
+            self.search();
+
+            $("#addressField").val('');
+
+            $('#locationFinder').toggle("drop", options, 500);
+
+          }
+
+      });
+
+    });
+
+
   }
+
 
 };
 

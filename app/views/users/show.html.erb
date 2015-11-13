@@ -1,21 +1,50 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <h1>Username:</h1>
-  <%= @user.username %>
-</p>
+<div class="container" id="user_show_container">
 
-<p>
-  <h1>About:</h1>
-  <%= @user.about %>
-</p>
+	<div class="row">
 
-<p>
-	<h1>Stories:</h1>
-<% @stories.each do |story|%>
-	<p><%= story.title %> </p>
-<% end %>
-</p>
+		<div class="col-md-4">
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+			<img src="http://images1.wikia.nocookie.net/__cb20120325155245/simpsons/images/2/28/200px-Orville_Simpson.png" alt="..." class="img-circle" id="profile_picture">
+
+
+  		<h1>Hi, <%= @user.username %></h1>
+
+  		<p>
+  			<h1>About</h1>
+  			<%= @user.about %>
+			</p>
+
+			<% if @user = current_user %>
+
+				<span><%= link_to 'Edit', edit_user_path(@user) %></span>
+
+			<% end %>
+
+		</div>
+
+		<div class="col-md-8">
+
+			<h2><%= @user.username %>'s stories</h2>
+
+			<h4><%= link_to 'Make new story!' , new_user_story_path(@user.id) %></h4>
+
+			<% @centers.each do |center|%>
+
+				<div style="background: url('http://maps.googleapis.com/maps/api/staticmap?center=<%=center[0]%>,<%=center[1]%>&zoom=13&scale=1&size=200x200&maptype=roadmap&format=png&visual_refresh=true')" class="user_stories"><b><%=link_to center[2], story_path(center[3]), class: 'user_stories_link' %></b></div>
+
+			<% end %>
+
+		</div>
+
+	</div>
+
+</div>
+
+
+
+
+
+
+

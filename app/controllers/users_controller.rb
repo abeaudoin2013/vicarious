@@ -6,8 +6,8 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    @stories = @user.stories.all
+    stories = @user.stories.all
+    @centers = Post.parse_centers(stories)
   end
 
   def new
@@ -19,17 +19,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-
-    respond_to do |format|
-      if @user.save
-        session[:user_id] = @user.id
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    @user = User.create(user_params)
+    if @user.save
+      session[:user_id] = @user.id
+      redirect_to @user, notice: "New account created!"
+    else
+      render :new
     end
   end
 
@@ -47,7 +42,6 @@ class UsersController < ApplicationController
 
 
   def destroy
-    @user = current_user
     session[:user_id] = nil
     @user.destroy
     respond_to do |format|
