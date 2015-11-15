@@ -1,14 +1,16 @@
 
 var Vicarious = {
 
-
 	initialized: false,
 
-	// This is fenway park
 	initialCenter: {
 		lat: null,
 	  lng: null
 	},
+
+  toggleOptions: {
+    direction: 'up'
+  },
 
   newPOV: [],
 
@@ -17,6 +19,10 @@ var Vicarious = {
 	panorama: null,
 
   geocoder: null,
+
+  key: null,
+
+  lander: null,
 
 	posts: [],
 
@@ -30,11 +36,11 @@ var Vicarious = {
 
   centers: [],
 
-  lander: null,
-
-	// markerData: {},
-
   init: function () {
+
+    //Need to figure out how to leave it initialized so it doesn't reload every time
+
+    //Probably better ajax request
 
     var self = this;
 
@@ -62,8 +68,8 @@ var Vicarious = {
 
     this.setAnimations();
 
-
   	this.initialized = true;
+
     return true;
   },
 
@@ -167,6 +173,8 @@ var Vicarious = {
         animation: google.maps.Animation.DROP
       });
 
+      //NEED TO SET MAX-WIDTH FOR INFOWINDOWS
+
       var infoWindow = new google.maps.InfoWindow({
         content: '<div class="posty"><h1>'  + post.title + '</h1> <p>' + post.body + '</p></div><br><a href="/users/' + post.userId + '"> by ' + post.username + '</a>'
       });
@@ -203,9 +211,6 @@ var Vicarious = {
         infoWindow.open(self.map, mapMarker);
       });
 
-      // this.infoWindowArr.push(infoWindow);
-
-      // this.mapMarkersArr.push(mapMarker);
 
 
     }.bind(this));
@@ -233,9 +238,13 @@ var Vicarious = {
 
     if (index === -1) {
 
+      // this is telling the program to set the current infoWindow to the very last one in the cycle
+
       currentInfo = this.infoWindows[j];
 
     } else {
+
+      //otherwise close the window we're currently at as soon as the click event fires
 
       currentInfo = this.infoWindows[index];
 
@@ -246,14 +255,19 @@ var Vicarious = {
 
     this.map.setCenter(nextCenter);
 
-    // this.panorama.setPov(nextPOV);
+    // this.panorama.setPov(nextPOV); //For now we've turned off POV b/c google maps does not enable putting markers or info windows at specified POVs
 
     this.panorama.setPosition({
+
+      //Setting the exact lat/lng means that the user will land directly on top of a marker and infoWindow,
+      //so we must specifiy approximately 10 steps back by subtracting fractional coordinates
 
       lat: nextCenter.lat - .0002, 
       lng: nextCenter.lng - .0002
     
     });
+
+    //after we set the map and the panorama, we restart the click event. 
 
     nextInfo.open(this.panorama, nextMarker);
 
@@ -274,32 +288,43 @@ var Vicarious = {
 
   },
 
-
+  //Here is how we build posts
 
   makePost: function () {
 
+    $('#post-form').toggle("drop", this.toggleOptions, 500 ); 
+    $('#toggleGeo').show();
+
     var vicariousPoster = {
 
-        post_data: {
+      post_data: {
 
-          heading: this.panorama.getPov().heading,
-          pitch: this.panorama.getPov().pitch,
-          lat: this.panorama.getPosition().lat(),
-          lng: this.panorama.getPosition().lng(),
-          title: $('#titleField').val(),
-          body: $('#textBox').val()
+        heading: this.panorama.getPov().heading,
+        pitch: this.panorama.getPov().pitch,
+        lat: this.panorama.getPosition().lat(),
+        lng: this.panorama.getPosition().lng(),
+        title: $('#titleField').val(),
+        body: $('#textBox').val()
 
-          }
+        }
 
-        };
+      };
+
+    //These two variables are tests becaue I'm trying to figure out why 
+    //submitting with the enter button ( see setAnimations() ) will sometimes fire twice
 
     var titleTest = vicariousPoster.post_data.title;
     var titleBody = vicariousPoster.post_data.body;
 
+    //Get the story id (as a string) from the dom so we can send the post request.
+
     var storyId = $('#story_id').html();
+
+    //parse into an integer so that we can store in the DB
 
     var storyInt = parseInt(storyId);
 
+    //make the link to tell AJAX where to send the post request
 
     var link = '/stories/' + storyId + '/posts'
 
@@ -320,17 +345,27 @@ var Vicarious = {
     }
     console.log(titleTest);
     console.log(titleBody);
+
     ajaxCaller(vicariousPoster);
+
+  },
+
+  cancelPost: function () {
+
+    $('#post-form').toggle("drop", self.toggleOptions, 500);
+    $('#toggleGeo').show();
+
   },
 
   search: function () {
     
     // call the geocode function with the address we want to use as parameter
 
+    var self = this;
 
     var address = $('#addressField').val();
 
-    var self = this;
+    //geocoder from google maps API
 
     this.geocoder.geocode({'address': address}, function(results, status) {
     
@@ -339,6 +374,9 @@ var Vicarious = {
         self.map.setCenter(results[0].geometry.location);
 
         self.panorama.setPosition(results[0].geometry.location);
+
+        $("#addressField").val('');
+        $('#locationFinder').toggle("drop", self.toggleOptions, 500);
 
       } else {
 
@@ -350,6 +388,8 @@ var Vicarious = {
 
   },
 
+// root page lander. Looks for DOM element
+
   setLander: function () {
 
     this.lander = $('#aboutLander');
@@ -359,28 +399,30 @@ var Vicarious = {
   },
 
   activateLander: function () {
-  
-    var self = this;
 
-    var options = {
-      direction: 'up'
-    };
+    //NEED TO USE COOKIES TO SEE IF IT IS FIRST TIME COMING TO SITE 
 
-    this.lander.toggle('drop', options, 500);
+    if (this.lander != null) {
 
-    this.lander.click(function () {
-      self.lander.toggle('drop', options, 500);
-    });
+      var self = this;
+
+      this.lander.toggle('drop', this.toggleOptions, 500);
+
+      this.lander.click(function () {
+        self.lander.toggle('drop', this.toggleOptions, 500);
+        self.lander = null;
+      });
+
+    }
 
   },
 
   setAnimations: function () {
 
-    var options = {
-      direction: "up"
-    };
-
     var self = this;
+    // var options = {
+    //   direction: "up"
+    // };
 
     $('#story_id').hide();
     $( "#locationFinder" ).hide();
@@ -390,59 +432,16 @@ var Vicarious = {
       
       $('#toggleGeo').hide();
 
-      $('#post-form').toggle("drop", options, 500 );  
+      $('#post-form').toggle("drop", self.toggleOptions, 500 );  
       $('#titleField').focus();
-
-
-      $('#cancel-post').click(function () {
-
-        $('#post-form').toggle("drop", options, 500);
-        $('#toggleGeo').show();
-
-      });
-
-
-      $('#textBox').keypress(function (e) {
-
-        var key = e.which;
-
-
-        if (key === 13) {
-
-          self.makePost();
-
-          $('#post-form').toggle("drop", options, 500 ); 
-          $('#toggleGeo').show();
-
-        }
-
-
-      });
 
     });
 
 
     $('#toggleGeo').click(function() {
 
-      $("#locationFinder").toggle( "drop", options, 500 );
-
+      $("#locationFinder").toggle( "drop", self.toggleOptions, 500 );
       $("#addressField").focus();
-
-      $("#addressField").keypress(function (e) {
-
-          var key = e.which;
-          
-          if(key === 13) {
-
-            self.search();
-
-            $("#addressField").val('');
-
-            $('#locationFinder').toggle("drop", options, 500);
-
-          }
-
-      });
 
     });
 

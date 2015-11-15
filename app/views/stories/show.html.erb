@@ -21,6 +21,7 @@
 
 	<div id="locationFinder">
 		<input type="text" id='addressField'>
+		<button id="locationSearch" onclick="Vicarious.search()">submit</button>
 	</div>
 
 	<button id="toggleGeo">Search</button>
@@ -29,7 +30,8 @@
 	<div id="post-form">
 		<input type="text" id='titleField' placeholder="title"><br>
 		<input type="textarea" id='textBox' placeholder="What happened here?"><br>
-	  <button id='cancel-post'>cancel</button>
+		<button id="submit-post" onclick="Vicarious.makePost()">submit</button>
+	  <button id='cancel-post' onclick="Vicarious.cancelPost()">cancel</button>
 	</div>
 
 	<div class="delete_story">
