@@ -335,7 +335,7 @@ var Vicarious = {
         dataType: 'json',
         data: {
           post: {
-            post_JSON: JSON.stringify(vicarious.post_data),
+            post_JSON: JSON.stringify(vicariousPoster.post_data),
             story_id: storyInt
           }
         }
@@ -347,6 +347,7 @@ var Vicarious = {
     console.log(titleBody);
 
     ajaxCaller(vicariousPoster);
+    this.addToPosts(vicariousPoster.post_data);
 
   },
 
@@ -354,6 +355,24 @@ var Vicarious = {
 
     $('#post-form').toggle("drop", self.toggleOptions, 500);
     $('#toggleGeo').show();
+
+  },
+
+  addToPosts: function (post) {
+
+    //Instead invoking an AJAX request, reparsing it through rails, and then loading it to the server
+    //We'll instead just push the latest post object we have to our posts property so that it can load it
+    //dynamically
+
+    var latestPost = post;
+    var findUserId = this.posts[0].userId;
+    var findUsername = this.posts[0].username;
+
+    latestPost.userId = findUserId;
+    latestPost.username = findUsername;
+
+    this.posts.push(latestPost);
+    this.plotPosts();
 
   },
 
