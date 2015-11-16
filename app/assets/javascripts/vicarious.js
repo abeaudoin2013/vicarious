@@ -427,7 +427,12 @@ var Vicarious = {
 
       this.lander.toggle('drop', this.toggleOptions, 500);
 
-      this.lander.click(function () {
+      $('.landerCloser').click(function () {
+        self.lander.toggle('drop', this.toggleOptions, 500);
+        self.lander = null;
+      });
+
+      $('.submit').click(function () {
         self.lander.toggle('drop', this.toggleOptions, 500);
         self.lander = null;
       });

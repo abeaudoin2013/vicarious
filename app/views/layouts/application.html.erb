@@ -42,9 +42,6 @@
 								<li role="presentation" class="active" id="toggleNewStory"><%= link_to "Start A New Story", new_user_story_path(current_user.id) %></li>
 								<li role="presentation" class="active"><%=link_to "Profile", user_path(current_user.id) %></li>
 								<li role="presentation" class="active"><%=link_to "Log Out", logout_path, method: :delete %></li>
-							<% else %>
-								<li role="presentation" class="active"><%= link_to "Sign Up", new_user_path %></li>
-								<li role="presentation" class="active"><%= link_to "Log In", login_path %></li>
 							<% end %>
 						</ul>
 

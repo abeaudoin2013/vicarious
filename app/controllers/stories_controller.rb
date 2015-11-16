@@ -10,6 +10,7 @@ class StoriesController < ApplicationController
   end
 
   def all
+    @user = User.new
     posts = Post.all
     @all_parsed_posts = Post.go_through(posts)
   end
