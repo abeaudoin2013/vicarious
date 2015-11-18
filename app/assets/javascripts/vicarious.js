@@ -365,8 +365,10 @@ var Vicarious = {
     //dynamically
 
     var latestPost = post;
-    var findUserId = this.posts[0].userId;
-    var findUsername = this.posts[0].username;
+    var findUserId = $('#find_user_id').html();
+    var findUsername = $('#find_username').html();
+
+    debugger
 
     latestPost.userId = findUserId;
     latestPost.username = findUsername;
@@ -432,10 +434,10 @@ var Vicarious = {
         self.lander = null;
       });
 
-      $('.submit').click(function () {
-        self.lander.toggle('drop', this.toggleOptions, 500);
-        self.lander = null;
-      });
+      // $('.submit').click(function () {
+      //   self.lander.toggle('drop', this.toggleOptions, 500);
+      //   self.lander = null;
+      // });
 
     }
 
@@ -451,6 +453,8 @@ var Vicarious = {
     $('#story_id').hide();
     $( "#locationFinder" ).hide();
     $('#post-form').hide();
+    $('#find_user_id').hide();
+    $('#find_username').hide();
 
     $('#toggelPostForm').click(function () {
       
