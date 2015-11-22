@@ -37,7 +37,7 @@ class StoriesController < ApplicationController
 
   def show
     @post = Post.new
-    @user = User.find_by(@story.user_id)
+    @user = User.find(@story.user_id)
     posts = @story.posts.all
     @all_parsed_posts = Post.go_through(posts)
   end
