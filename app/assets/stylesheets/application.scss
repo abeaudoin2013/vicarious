@@ -19,6 +19,9 @@
 @import "bootstrap";
 
 // NAV BAR
+a {
+	text-decoration: none;
+}
 #brand {
 	margin-top: -10px;
 	margin-left: 0px;
@@ -56,13 +59,28 @@
 #pano-container {
 	margin-top: 2.5%;
 }
+.mainButtons {
+	margin-left: 2%;
+  width: 130px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid black;
+}
 
 // Post Forms
 #toggelGeo {
 	display:inline-block;
+	margin-left: 10%;
 }
 .delete_story {
 	display:inline-block;
+	text-decoration: none;
+	color: black;
+}
+.delete_story:hover {
+	text-decoration: none;
+	color: black;
 }
 #toggelPostForm {
 	position: relative;
@@ -70,11 +88,12 @@
 }
 #post-form {
   width: 100%;
-	position: absolute;
-	z-index: 30;
-	max-height: 100%;
-	background-color: rgba(255, 255, 255, .8);
-	border: 1px solid gray;
+  top: 2px;
+  position: absolute;
+  z-index: 30;
+  max-height: 100%;
+  background-color: rgba(255, 250, 240, 0.9);
+  border-bottom: 1px solid gray;
 }
 #titleField {
 	margin: 0 auto;
@@ -96,18 +115,29 @@
 	outline: none;
 }
 #textBox {
-	margin: 0 auto;
-	display: block;
-	width: 90%;
-	text-align: center;
-	border: none;
-	font-size: 4em;
-	border-radius: 15px;
-	overflow: visible;
-	max-height: 100%;
-	height: 30vh;
-	padding: 15px;
-	background-color: rgba(255, 255, 255, 0);
+  margin: 0 auto;
+  display: block;
+  width: 90%;
+  text-align: center;
+  border: none;
+  font-size: 2em;
+  border-radius: 15px;
+  overflow: visible;
+  max-height: 100%;
+  height: 30vh;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0);
+}
+.postButtons {
+	margin-left: 3%;
+  margin-bottom: 1%;
+  width: 90px;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid black;
+}
+#cancel-post {
+	width: 8%;
 }
 #textBox:focus {
 	outline-width: 0;
@@ -118,9 +148,19 @@
 #locationFinder {
 	width: 100%;
 	position: absolute;
+	top: 0;
 	z-index: 30;
 	height: 40%;
-	background-color: rgba(255, 255, 255, .8);
+	background-color: rgba(255, 250, 240, 0.9);
+	border-bottom: 1px solid black;
+}
+.locationButtons {
+  margin-top: 8%;
+  margin-left: 3%;
+  width: 90px;
+  border-radius: 5px;
+  background-color: white;
+  border: 1px solid black;
 }
 #addressField {
 	margin: 0 auto;
@@ -149,6 +189,12 @@
 }
 #profile_picture {
 	border: 1px solid gray;
+}
+.field {
+	font-size: 5em;
+}
+.actions {
+	font-size: 5em;
 }
 .user_stories {
   width: 200px;
@@ -180,9 +226,13 @@
 .story_link {
 	max-width: 100%;
 }
+.newStoryButton {
+	color: #333333;
+	margin-left: 0%;
+}
 
 //New Story
-.newStory {
+.fy {
   text-align: center;
   border: 1px solid white;
   height: 90vh;
@@ -236,11 +286,12 @@
   z-index: 20;
   font-family: "Avalon",sans-serif;
   font-weight: 900;
-  font-size: 4.5em;
   letter-spacing: -0.2px;
   line-height: .95;
   color: white;
-  // text-shadow: 0 1px 12px black;
+}
+.greeting {
+	font-size: 4.5em;
 }
 .landerColumns {
 	margin-top: 10vh;
@@ -272,6 +323,8 @@
 	font-size: .3em;
 	margin-top: 10%;
 	margin-bottom: 30%;
+	padding-left: 5%;
+	border-left: 1px solid white;
 }
 .field {
 	margin-top: 4%;
@@ -306,9 +359,9 @@
 	color: black;
 }
 .submit {
-	background: none;
+	background: white;
   border: none;
-  color: white;
+  color: black;
   margin-top: 3%;
 }
 .landerCloser {

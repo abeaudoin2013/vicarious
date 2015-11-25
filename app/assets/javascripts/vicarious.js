@@ -101,7 +101,10 @@ var Vicarious = {
 	  
 	  this.map = new google.maps.Map(document.getElementById('map'), {
 	    center: this.initialCenter,
-	    zoom: 14
+	    zoom: 14,
+      zoomControl: true,
+      mapTypeControl: true,
+      streetViewControl: true
 	  });
 	  
   },
@@ -295,6 +298,7 @@ var Vicarious = {
     $('#post-form').toggle("drop", this.toggleOptions, 500 ); 
     $('#toggleGeo').show();
 
+
     var vicariousPoster = {
 
       post_data: {
@@ -310,44 +314,55 @@ var Vicarious = {
 
       };
 
-    //These two variables are tests becaue I'm trying to figure out why 
-    //submitting with the enter button ( see setAnimations() ) will sometimes fire twice
+    if (vicariousPoster.post_data.body === '') {
 
-    var titleTest = vicariousPoster.post_data.title;
-    var titleBody = vicariousPoster.post_data.body;
+      alert('You must include a description!');
 
-    //Get the story id (as a string) from the dom so we can send the post request.
+      // $('#post-form').toggle("drop", self.toggleOptions, 500);
+      // $('#toggleGeo').show();
 
-    var storyId = $('#story_id').html();
+    } else { 
 
-    //parse into an integer so that we can store in the DB
+      //These two variables are tests becaue I'm trying to figure out why 
+      //submitting with the enter button ( see setAnimations() ) will sometimes fire twice
 
-    var storyInt = parseInt(storyId);
+      var titleTest = vicariousPoster.post_data.title;
+      var titleBody = vicariousPoster.post_data.body;
 
-    //make the link to tell AJAX where to send the post request
+      //Get the story id (as a string) from the dom so we can send the post request.
 
-    var link = '/stories/' + storyId + '/posts'
+      var storyId = $('#story_id').html();
 
-    function ajaxCaller(vicarious){
-      var ajaxRequest = $.ajax({
-        type: 'POST',
-        url: link,
-        dataType: 'json',
-        data: {
-          post: {
-            post_JSON: JSON.stringify(vicariousPoster.post_data),
-            story_id: storyInt
+      //parse into an integer so that we can store in the DB
+
+      var storyInt = parseInt(storyId);
+
+      //make the link to tell AJAX where to send the post request
+
+      var link = '/stories/' + storyId + '/posts'
+
+      function ajaxCaller(vicarious){
+        var ajaxRequest = $.ajax({
+          type: 'POST',
+          url: link,
+          dataType: 'json',
+          data: {
+            post: {
+              post_JSON: JSON.stringify(vicariousPoster.post_data),
+              story_id: storyInt
+            }
           }
-        }
-      });
-      ajaxRequest.done($('#titleField').val(''), $('#textBox').val(''));
-    
-    }
-    console.log(titleTest);
-    console.log(titleBody);
+        });
+        ajaxRequest.done($('#titleField').val(''), $('#textBox').val(''));
+      
+      }
+      console.log(titleTest);
+      console.log(titleBody);
 
-    ajaxCaller(vicariousPoster);
-    this.addToPosts(vicariousPoster.post_data);
+      ajaxCaller(vicariousPoster);
+      this.addToPosts(vicariousPoster.post_data);
+
+    }
 
   },
 
@@ -409,7 +424,13 @@ var Vicarious = {
 
   },
 
-// root page lander. Looks for DOM element
+  cancelSearch: function () {
+
+    $('#locationFinder').toggle( "drop", self.toggleOptions, 500 );
+
+  },
+
+// root page lander. Looks for DOM element. Rails will hide the lander if there is a current user
 
   setLander: function () {
 
@@ -420,8 +441,6 @@ var Vicarious = {
   },
 
   activateLander: function () {
-
-    //NEED TO USE COOKIES TO SEE IF IT IS FIRST TIME COMING TO SITE 
 
     if (this.lander != null) {
 
@@ -446,19 +465,17 @@ var Vicarious = {
   setAnimations: function () {
 
     var self = this;
-    // var options = {
-    //   direction: "up"
-    // };
+    
+    // Hide elements in the dom.
 
     $('#story_id').hide();
     $( "#locationFinder" ).hide();
     $('#post-form').hide();
     $('#find_user_id').hide();
     $('#find_username').hide();
+    $('.editUser').hide();
 
     $('#toggelPostForm').click(function () {
-      
-      $('#toggleGeo').hide();
 
       $('#post-form').toggle("drop", self.toggleOptions, 500 );  
       $('#titleField').focus();

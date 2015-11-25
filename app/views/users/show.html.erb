@@ -18,7 +18,13 @@
 
 			<% if @user = current_user %>
 
-				<span><%= link_to 'Edit', edit_user_path(@user) %></span>
+				<button class='mainButtons'><%= link_to "Start A New Story", new_user_story_path(current_user.id), class: 'newStoryButton' %></button>
+
+				<button class='mainButtons' id='editUserButton'>Edit</button>
+
+				<div class="editUser">
+					<%= render 'form' %>
+				</div>
 
 			<% end %>
 
@@ -42,7 +48,20 @@
 
 <% content_for :javascript do %>
   <script type='text/javascript'>
-    Vicarious.initialized = false;
+  	
+  	var toggleOption = {
+    	direction: 'up'
+  	};
+
+  	Vicarious.initialized = false;
+
+  	$('.editUser').hide();
+
+  	$('#editUserButton').click(function () {
+  		$('.signUpLogo').hide();
+  		$('.editUser').toggle("drop", toggleOption, 500);
+  	});
+    
   </script>
 
 <% end %>

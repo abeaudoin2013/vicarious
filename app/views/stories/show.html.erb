@@ -22,23 +22,25 @@
 <% if current_user and current_user == @user %>
 
 	<div id="locationFinder">
-		<input type="text" id='addressField'>
-		<button id="locationSearch" onclick="Vicarious.search()">submit</button>
+		<input type="text" id='addressField' placeholder='Where you do you want go?'>
+		<button id="locationSearch" class='locationButtons' onclick="Vicarious.search()">submit</button>
+		<button id='unToggleGeo' class='locationButtons' onclick="Vicarious.cancelSearch()">cancel</button>
 	</div>
 
-	<button id="toggleGeo">Search</button>
-	<button id="toggelPostForm">Make post</button>
+	<button class='mainButtons' id="toggleGeo">New Location</button>
+	<button class='mainButtons' id="toggelPostForm">Make New Post</button>
+	<button class='mainButtons' id='delete_button'><%= link_to 'delete story', @story, method: :delete, class: 'delete_story' %></button>
 	
 	<div id="post-form">
-		<input type="text" id='titleField' placeholder="title"><br>
-		<input type="textarea" id='textBox' placeholder="What happened here?"><br>
-		<button id="submit-post" onclick="Vicarious.makePost()">submit</button>
-	  <button id='cancel-post' onclick="Vicarious.cancelPost()">cancel</button>
+		<input type="text" id='titleField' placeholder="title (optional)"><br>
+		<textarea rows='100' id='textBox' placeholder="What happened here?"></textarea><br>
+		<button id="submit-post" class='postButtons' onclick="Vicarious.makePost()">submit</button>
+	  <button id='cancel-post' class='postButtons' onclick="Vicarious.cancelPost()">cancel</button>
 	</div>
 
-	<div class="delete_story">
-		<button id='delete_button'><%= link_to 'delete', @story, method: :delete %></button>
-	</div>
+	<!-- <div class="delete_story">
+		
+	</div> -->
 
 <% end %>
 	
