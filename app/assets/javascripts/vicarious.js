@@ -383,8 +383,6 @@ var Vicarious = {
     var findUserId = $('#find_user_id').html();
     var findUsername = $('#find_username').html();
 
-    debugger
-
     latestPost.userId = findUserId;
     latestPost.username = findUsername;
 
