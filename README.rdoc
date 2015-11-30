@@ -2,7 +2,7 @@
 
 Welcome to Vicarious, an interactive travel blog. Using this rails application, you are able to go onto Google Maps Street View and make posts.
 
-Before the fun can begin, please be sure to run `rake db:migrate`
+Before the fun can begin, please be sure to run <tt>rake db:migrate</tt>
 
 If you want to change the initial starting latitude and longitude in the initial map/panorama (right now set on San Francisco), you may do so on line 91 in the Vicarious.js file.
 
