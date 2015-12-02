@@ -38,9 +38,7 @@ var Vicarious = {
 
   init: function () {
 
-    //Need to figure out how to leave it initialized so it doesn't reload every time
-
-    //Probably better ajax request
+    //This function is called after JS libraries are loaded and DOM is loaded
 
     var self = this;
 
@@ -49,24 +47,44 @@ var Vicarious = {
   		return false;
 
   	}
- 
+    
+    //first, abstract the post data hidden in the DOM
+
     this.setPosts();
+
+    //finds the lander on the DOM and sets it to the lander property 
 
     this.setLander();
 
+    //find the first post's center and set that is the inital point
+
     this.setInitialCenter();
+
+    //start the map
 
   	this.initializeMap();
 
+    //start the panorama
+
     this.initializePanorama();
+
+    //set the geolocator
 
     this.initializeGeocoder();
 
+    //once all that is set plot the posts on the map
+
   	this.plotPosts();
+
+    //If there is a lander in the DOM, toggle it
 
     this.activateLander();
 
+    //Set all other animations
+
     this.setAnimations();
+
+    //And then finally make set the initalize function to true so that we do re-initialize
 
   	this.initialized = true;
 
@@ -76,6 +94,9 @@ var Vicarious = {
   setInitialCenter: function () {
 
     var firstPost = null;
+
+    //Once you have your array of posts, find the first one and set it to the intial center.
+    //Otherwise go to San Francisco
 
     if (this.posts.length) {
 
@@ -99,6 +120,11 @@ var Vicarious = {
 
   initializeMap: function () {
 	  
+    //Map must have a DOM element to display in before google maps can initialize.
+    //This is why we load the DOM before we call Google Maps
+    //set Vicarious.map property to an instance of the google maps object
+    //passing it the initial center that we've already set
+
 	  this.map = new google.maps.Map(document.getElementById('map'), {
 	    center: this.initialCenter,
 	    zoom: 14,
@@ -110,27 +136,49 @@ var Vicarious = {
   },
 
   initializePanorama: function () {
+
+    //Although our panorama is the heart of the project,
+    //We have to have an instance of the google maps object already set.
+    //This is why we call initialize Map first. 
+
   	this.panorama = new google.maps.StreetViewPanorama(
       document.getElementById('pano'), {
         position: {
+
+          //we subtract a small fraction off of the lat
+          //and lng in order for the user to see the post 
+          //that will land at the EXACT lat/lng
+
           lat: this.initialCenter.lat - .0002,
           lng: this.initialCenter.lng - .0002
         }
       });
+
+    //this is a google maps function
+
 	  this.map.setStreetView(this.panorama);
+
   },
 
   initializeGeocoder: function () {
+
     this.geocoder =  new google.maps.Geocoder();
+
   },
 
   setPosts: function () {
   	
+    //sets a variable equal to all post elements in the DOM
+
     var $posts = $('.Post');
 
     $.each($posts, function(index, post) {
       
+      //set a variable for each post
+
       var $post = $(post);
+
+      //take each post's data and push it the Vicarious.posts array 
 
       this.posts.push({
         lat: $post.data('lat'),
@@ -149,22 +197,29 @@ var Vicarious = {
 
   plotPosts: function () {
 
+    //Now that we've 
+    //1. gotten our posts
+    //2. put them into an array
+    //3. initialized our maps and geocoder
+    // we can now actually plot the posts on both maps
+
     var self = this;
 
   	$.each(this.posts, function(index, post) {
-      
-        
-      //Will these make the info windows sync in chronological order?
 
       var center = {
         lat: post.lat,
         lng: post.lng
       };
 
+      //the POV properties are still in beta
+
       var pov = {
         heading: post.heading,
         pitch: post.pitch
       };
+
+      //set lat, lng and animation for map and pano markers
 
       var mapMarker = new google.maps.Marker({
         position: center,
@@ -176,15 +231,20 @@ var Vicarious = {
         animation: google.maps.Animation.DROP
       });
 
-      //NEED TO SET MAX-WIDTH FOR INFOWINDOWS
+      //set infowindow information
 
       var infoWindow = new google.maps.InfoWindow({
-        content: '<div class="posty"><h1>'  + post.title + '</h1> <p>' + post.body + '</p></div><br><a href="/users/' + post.userId + '"> by ' + post.username + '</a>'
+        content: '<div class="posty"><h1>'  + post.title + '</h1> <h3>' + post.body + '</h3></div><br><a href="/users/' + post.userId + '"> by ' + post.username + '</a>'
       });
+
+      //tell markers which map to go to
+      //i.e. that map and panorama on the Vicarious object
 
       mapMarker.setMap(this.map);
 
       panoMarker.setMap(this.panorama);
+
+      //push each piece of information into arrays which will be used in Vicarious.aroundTheWorld()
 
       this.centers.push(center);
 
@@ -199,31 +259,44 @@ var Vicarious = {
       
       panoMarker.addListener('click', function () {
 
+        //info window needs a map to open on and 
+        //needs to be attached to a marker
+
         infoWindow.open(self.panorama, panoMarker);
 
-        //auto pan has to go here
+        //Make it so that when you click on the infowindow,
+        //it will take you to the next infowindow, 
+        //the function for which lives in aroundTheWorld()
         
         $('.posty').click(function () {
           
+          //it gets passed the index of the current post
+
           self.aroundTheWorld(index);
 
         });
+
       });
 
       mapMarker.addListener('click', function () {
+
+        //this allows you to also see the infoWindow on the regular map
+
         infoWindow.open(self.map, mapMarker);
+
       });
 
 
 
     }.bind(this));
+
   },
 
   aroundTheWorld: function (index) {
 
     // index is the position of the current marker and its corresponding infowindow.
 
-    // The index of our .each function has the same index as the arrays containing their information
+    // The index of our .each function has the same index as the centers, infowindow, marker, and pov arrays
 
     // i.e. POVs[0] contains the same pitch and heading taken from $.each post[0];
 
@@ -291,7 +364,7 @@ var Vicarious = {
 
   },
 
-  //Here is how we build posts
+  //Here is how we send posts via AJAX
 
   makePost: function () {
 
@@ -301,7 +374,11 @@ var Vicarious = {
 
     var vicariousPoster = {
 
+      //JSON object to be sent 
+
       post_data: {
+
+        //gets heading, pitch, lat and lng from pano
 
         heading: this.panorama.getPov().heading,
         pitch: this.panorama.getPov().pitch,
@@ -318,13 +395,9 @@ var Vicarious = {
 
       alert('You must include a description!');
 
-      // $('#post-form').toggle("drop", self.toggleOptions, 500);
-      // $('#toggleGeo').show();
-
     } else { 
 
-      //These two variables are tests becaue I'm trying to figure out why 
-      //submitting with the enter button ( see setAnimations() ) will sometimes fire twice
+      //sanity check to make sure these are being sent
 
       var titleTest = vicariousPoster.post_data.title;
       var titleBody = vicariousPoster.post_data.body;
@@ -348,11 +421,14 @@ var Vicarious = {
           dataType: 'json',
           data: {
             post: {
-              post_JSON: JSON.stringify(vicariousPoster.post_data),
+              post_JSON: JSON.stringify(vicarious.post_data),
               story_id: storyInt
             }
           }
         });
+
+        //clear the the text fields
+
         ajaxRequest.done($('#titleField').val(''), $('#textBox').val(''));
       
       }
@@ -360,6 +436,9 @@ var Vicarious = {
       console.log(titleBody);
 
       ajaxCaller(vicariousPoster);
+
+      //send latest post data to this function
+
       this.addToPosts(vicariousPoster.post_data);
 
     }
@@ -376,7 +455,7 @@ var Vicarious = {
   addToPosts: function (post) {
 
     //Instead invoking an AJAX request, reparsing it through rails, and then loading it to the server
-    //We'll instead just push the latest post object we have to our posts property so that it can load it
+    //We'll instead just push the latest post object we have to our posts array property so that it can load it
     //dynamically
 
     var latestPost = post;
@@ -387,6 +466,9 @@ var Vicarious = {
     latestPost.username = findUsername;
 
     this.posts.push(latestPost);
+
+    //replot the posts
+
     this.plotPosts();
 
   },
@@ -450,11 +532,6 @@ var Vicarious = {
         self.lander.toggle('drop', this.toggleOptions, 500);
         self.lander = null;
       });
-
-      // $('.submit').click(function () {
-      //   self.lander.toggle('drop', this.toggleOptions, 500);
-      //   self.lander = null;
-      // });
 
     }
 
